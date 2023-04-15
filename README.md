@@ -156,7 +156,7 @@ provider "aws" {
 }
 
 module "cicd-backend" {
-  source        = "app.terraform.io/bigfantech/codepipeline-cicd/aws"
+  source        = "bigfantech-cloud/codepipeline-cicd/aws"
   version       = "1.0.0"
   project_name  = "abc"
   environment   = "dev"
@@ -194,7 +194,7 @@ Custom stages:
 
 ```
 module "cicd-backend" {
-  source        = "app.terraform.io/bigfantech/codepipeline-cicd/aws"
+  source        = "bigfantech-cloud/codepipeline-cicd/aws"
   version       = "1.0.0"
   project_name  = "abc"
   environment   = "dev"
