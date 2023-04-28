@@ -105,14 +105,14 @@ variable "deploy_config" {
   default     = null
 }
 
-variable "github_repository" {
-  description = "GitHub repository name. Ex: studiographen/tf-module"
+variable "vcs_repository" {
+  description = "VCS repository name. Ex: bigfantech-cloud/app1"
   type        = string
   default     = null
 }
 
-variable "github_branch" {
-  description = "GitHub repository branch to use as source"
+variable "vcs_branch" {
+  description = "VCS repository branch to use as source"
   type        = string
   default     = null
 }
@@ -129,8 +129,8 @@ variable "cloudfront_id_for_invalidation" {
   default     = null
 }
 
-variable "detect_changes" {
-  description = "Whether to detect changes automatically when code is merged in branch"
+variable "auto_detect_vcs_changes" {
+  description = "Whether to detect changes automatically when there is change in VCS branch"
   type        = string
   default     = "true"
 }
