@@ -26,9 +26,9 @@ resource "aws_codepipeline" "default" {
 
       configuration = {
         ConnectionArn    = var.codestar_connection_arn
-        FullRepositoryId = var.github_repository
-        BranchName       = var.github_branch
-        DetectChanges    = var.detect_changes
+        FullRepositoryId = var.vcs_repository
+        BranchName       = var.vcs_branch
+        DetectChanges    = var.auto_detect_vcs_changes
       }
     }
   }
