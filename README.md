@@ -10,8 +10,8 @@ REQUIRED:
 - project_name               (ex: project name)
 - environment                (ex: dev/prod)
 - buildspec_path             Buildspec.yml location in your local machine.
-- github_repository          GitHub repository name (ex: studiographen/tf-module).
-- github_branch              (ex: main)
+- vcs_repository             VCS repository name. (example: bigfantech-cloud/app1)
+- vcs_branch                 VCS repository branch to use as source
 - deploy_provider            (ex: ECS, S3)
 - vpc_id                     (ex: module.network.vpc_id)
 - subnet_id                  (ex: module.network.subnet_ids)
@@ -22,13 +22,13 @@ REQUIRED:
 
 deploy_config exapmple for deploy proiver (ECS)
 - deploy_config = {
-    ClusterName = "ecs-cluster-name"
-    ServiceName = "ecs-service-name"
+    ClusterName = "<ecs-cluster-name>"
+    ServiceName = "<ecs-service-name>"
   }
 
 deploy_config example for deploy proiver (S3)
 - deploy_config = {
-    BucketName = "bucket-name"
+    BucketName = "<bucket-name>"
     Extract    = "true"
   }
 ```
@@ -108,28 +108,28 @@ OPTIONAL:
   }
 ]
 
-- codebuild_inside_vpc:             Enable CodeBuild inside VPC, true or false. Default = false.
+- codebuild_inside_vpc:             Enable CodeBuild inside VPC, true or false. Default = false
 
-- codebuild_cloudwatch_logs:        Enable CloudWathach log for CodeBuild, true or false. Default = true.
+- codebuild_cloudwatch_logs:        Enable CloudWathach log for CodeBuild, true or false. Default = true
 
 - codebuild_s3_logs:                Save CodeBuild logs in S3 bucket. Defaul = false"
 
 - cb_log_bucket_force_destroy:
-    Delete all objects from CodeBuild log bucket so that the bucket can be destroyed without error. `true` or `false`.
+    Delete all objects from CodeBuild log bucket so that the bucket can be destroyed without error. `true` or `false`
     Default = false.
 
 - cp_artifact_bucket_force_destroy:
-    Delete all objects from CodePipeline Artifact bucket so that the bucket can be destroyed without error.`true` or `false`.
+    Delete all objects from CodePipeline Artifact bucket so that the bucket can be destroyed without error.`true` or `false`
     Default = false.
 
-- additional_codebuild_iam_permisssions:    List of additional permissions to attach to CodeBuild IAM policy.
+- additional_codebuild_iam_permisssions:    List of additional permissions to attach to CodeBuild IAM policy
                                             ex: ["ecs:*", "cloudwatch:*"]
 
-- additional_codepipeline_iam_permisssions: List of additional permissions to attach to CodePipeline IAM policy.
+- additional_codepipeline_iam_permisssions: List of additional permissions to attach to CodePipeline IAM policy
                                             ex: ["ecs:*", "cloudwatch:*"]
 
-- detect_changes:
-    Whether to detect changes automatically when code is merged in branch. Valid values "true" or "false". Default = "true".
+- auto_detect_vcs_changes:
+    Whether to detect changes automatically when there is change in VCS branch. Default = "true"
 ```
 
 ## Major resources created:
@@ -178,8 +178,8 @@ module "cicd-backend" {
   #---
   codestar_connection_arn = "arn::"
   aws_chatbot_slack_arn   = "arn::"
-  github_repository       = "bigfantech/sample-backend"
-  github_branch           = "main"
+  vcs_repository          = "bigfantech/sample-backend"
+  ccs_branch              = "main"
   deploy_provider         = "ECS"
 
   deploy_config = {
