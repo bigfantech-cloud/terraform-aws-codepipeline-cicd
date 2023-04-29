@@ -5,7 +5,7 @@ resource "aws_codebuild_project" "default" {
 
   source {
     type      = "CODEPIPELINE"
-    buildspec = file("${var.buildspec_path}")
+    buildspec = var.buildspec
   }
 
   environment {

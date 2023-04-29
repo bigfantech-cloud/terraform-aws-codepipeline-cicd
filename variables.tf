@@ -42,8 +42,8 @@ variable "codebuild_inside_vpc" {
   default     = false
 }
 
-variable "buildspec_path" {
-  description = "Buildspec file path."
+variable "buildspec" {
+  description = "Buildspec file. Use file() or use EOT to pass buildspec"
   type        = string
   default     = null
 }
@@ -105,13 +105,8 @@ variable "deploy_config" {
   default     = null
 }
 
-<<<<<<< HEAD
 variable "vcs_repository" {
   description = "VCS repository name. Ex: bigfantech-cloud/app1"
-=======
-variable "github_repository" {
-  description = "GitHub repository name. example: studiographen/tf-module"
->>>>>>> 3835d74 (Change: Context module source)
   type        = string
   default     = null
 }

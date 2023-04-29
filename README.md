@@ -9,7 +9,7 @@ REQUIRED:
 ```
 - project_name               (example: project name)
 - environment                (example: dev/prod)
-- buildspec_path             Buildspec.yml location in your local machine.
+- buildspec                  Buildspec file. Use file() or use EOT to pass buildspec
 - vcs_repository             VCS repository name. (example: bigfantech-cloud/app1)
 - vcs_branch                 VCS repository branch to use as source
 - deploy_provider            (ex: ECS, S3)
@@ -168,7 +168,7 @@ module "cicd-backend" {
   codebuild_inside_vpc            = true
   vpc_id                          = module.network.vpc_id
   subnet_id                       = module.network.subnet_ids
-  buildspec_path                  = "./buildspec.yml"
+  buildspec                       = file("./buildspec.yml")
   codebuild_cloudwatch_logs       = true
   create_cloudfront_invalidation  = true
   cloudfront_id_for_invalidation  = "abcd12345"
@@ -206,7 +206,7 @@ module "cicd-backend" {
   codebuild_inside_vpc      = true
   vpc_id                    = module.network.vpc_id
   subnet_id                 = module.network.subnet_ids
-  buildspec_path            = "./buildspec.yml"
+  buildspec                 = file("./buildspec.yml")
   codebuild_cloudwatch_logs = true
 
   #---
