@@ -7,8 +7,8 @@ To setup CodeBuild, CodePipeline CICD.
 REQUIRED:
 
 ```
-- project_name               (ex: project name)
-- environment                (ex: dev/prod)
+- project_name               (example: project name)
+- environment                (example: dev/prod)
 - buildspec_path             Buildspec.yml location in your local machine.
 - vcs_repository             VCS repository name. (example: bigfantech-cloud/app1)
 - vcs_branch                 VCS repository branch to use as source
@@ -122,11 +122,11 @@ OPTIONAL:
     Delete all objects from CodePipeline Artifact bucket so that the bucket can be destroyed without error.`true` or `false`
     Default = false.
 
-- additional_codebuild_iam_permisssions:    List of additional permissions to attach to CodeBuild IAM policy
-                                            ex: ["ecs:*", "cloudwatch:*"]
+- additional_codebuild_iam_permisssions:    List of additional permissions to attach to CodeBuild IAM policy.
+                                            example: ["ecs:*", "cloudwatch:*"]
 
-- additional_codepipeline_iam_permisssions: List of additional permissions to attach to CodePipeline IAM policy
-                                            ex: ["ecs:*", "cloudwatch:*"]
+- additional_codepipeline_iam_permisssions: List of additional permissions to attach to CodePipeline IAM policy.
+                                            example: ["ecs:*", "cloudwatch:*"]
 
 - auto_detect_vcs_changes:
     Whether to detect changes automatically when there is change in VCS branch. Default = "true"

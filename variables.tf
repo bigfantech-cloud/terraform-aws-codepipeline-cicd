@@ -59,7 +59,7 @@ variable "codebuild_s3_logs" {
 }
 
 variable "additional_codebuild_iam_permisssions" {
-  description = "List of additional permissions to attach to CodeBuild IAM policy. Ex: [\"ecs:*\", \"cloudwatch:*\"] "
+  description = "List of additional permissions to attach to CodeBuild IAM policy. example: [\"ecs:*\", \"cloudwatch:*\"] "
   type        = list(any)
   default     = []
 }
@@ -69,7 +69,7 @@ variable "additional_codebuild_iam_permisssions" {
 #-----
 
 variable "additional_codepipeline_iam_permisssions" {
-  description = "List of additional permissions to attach to CodePipeline IAM policy. Ex: [\"ecs:*\", \"cloudwatch:*\"] "
+  description = "List of additional permissions to attach to CodePipeline IAM policy. example: [\"ecs:*\", \"cloudwatch:*\"] "
   type        = list(any)
   default     = []
 }
@@ -81,7 +81,7 @@ variable "codestar_connection_arn" {
 }
 
 variable "deploy_provider" {
-  description = "CodePipeline Deployment provider. Ex: ECS, S3,.."
+  description = "CodePipeline Deployment provider. example: ECS, S3,.."
   type        = string
   default     = null
 }
@@ -105,8 +105,13 @@ variable "deploy_config" {
   default     = null
 }
 
+<<<<<<< HEAD
 variable "vcs_repository" {
   description = "VCS repository name. Ex: bigfantech-cloud/app1"
+=======
+variable "github_repository" {
+  description = "GitHub repository name. example: studiographen/tf-module"
+>>>>>>> 3835d74 (Change: Context module source)
   type        = string
   default     = null
 }
