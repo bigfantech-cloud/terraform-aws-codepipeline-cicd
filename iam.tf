@@ -2,34 +2,6 @@
 #CODEBUILD
 #-----
 
-resource "aws_iam_role" "codebuild_role" {
-  name = "${module.this.id}-codebuild-role"
-
-  assume_role_policy = jsonencode({
-    Version = "2008-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-
-        Principal = {
-          Service = "codebuild.amazonaws.com"
-        }
-
-        Action = "sts:AssumeRole"
-      },
-    ]
-  })
-
-  tags = module.this.tags
-}
-
-
-resource "aws_iam_role_policy" "codebuild_policy" {
-  name   = "${module.this.id}-codebuild-policy"
-  role   = aws_iam_role.codebuild_role.id
-  policy = data.aws_iam_policy_document.codebuild_permissions.json
-}
-
 data "aws_iam_policy_document" "codebuild_permissions" {
   statement {
     effect = "Allow"
@@ -72,12 +44,8 @@ data "aws_iam_policy_document" "codebuild_permissions" {
   }
 }
 
-#-----
-#CODEPIPELINE
-#-----
-
-resource "aws_iam_role" "codepipeline_role" {
-  name = "${module.this.id}-codepipeline-role"
+resource "aws_iam_role" "codebuild_role" {
+  name = "${module.this.id}-codebuild-role"
 
   assume_role_policy = jsonencode({
     Version = "2008-10-17"
@@ -86,11 +54,11 @@ resource "aws_iam_role" "codepipeline_role" {
         Effect = "Allow"
 
         Principal = {
-          Service = "codepipeline.amazonaws.com"
+          Service = "codebuild.amazonaws.com"
         }
 
         Action = "sts:AssumeRole"
-      }
+      },
     ]
   })
 
@@ -98,14 +66,17 @@ resource "aws_iam_role" "codepipeline_role" {
 }
 
 
-resource "aws_iam_role_policy" "codepipeline_policy" {
-  name   = "${module.this.id}-codepipeline-policy"
-  role   = aws_iam_role.codepipeline_role.id
-  policy = data.aws_iam_policy_document.codepipeline_permissions.json
+resource "aws_iam_role_policy" "codebuild_policy" {
+  name   = "${module.this.id}-codebuild-policy"
+  role   = aws_iam_role.codebuild_role.id
+  policy = var.custom_codebuild_policy_document != null ? var.custom_codebuild_policy_document : data.aws_iam_policy_document.codebuild_permissions.json
 }
 
-data "aws_iam_policy_document" "codepipeline_permissions" {
+#-----
+#CODEPIPELINE
+#-----
 
+data "aws_iam_policy_document" "codepipeline_permissions" {
   statement {
     effect = "Allow"
 
@@ -141,6 +112,34 @@ data "aws_iam_policy_document" "codepipeline_permissions" {
       var.codestar_connection_arn,
     ]
   }
+}
+
+resource "aws_iam_role" "codepipeline_role" {
+  name = "${module.this.id}-codepipeline-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2008-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Principal = {
+          Service = "codepipeline.amazonaws.com"
+        }
+
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  tags = module.this.tags
+}
+
+
+resource "aws_iam_role_policy" "codepipeline_policy" {
+  name   = "${module.this.id}-codepipeline-policy"
+  role   = aws_iam_role.codepipeline_role.id
+  policy = var.custom_codepipeline_policy_document != null ? var.custom_codepipeline_policy_document : data.aws_iam_policy_document.codepipeline_permissions.json
 }
 
 
