@@ -65,7 +65,10 @@ variable "additional_codebuild_iam_permisssions" {
 }
 
 variable "custom_codebuild_policy_document" {
-  description = "Custom policy document for CodeBuild. Use `aws_iam_policy_document` data block to generate json"
+  description = <<-EOT
+    Custom policy document for CodeBuild to attach instead of policy defined in this module.
+    Use `aws_iam_policy_document` data block to generate JSON
+  EOT
   type        = string
   default     = null
 }
@@ -75,10 +78,14 @@ variable "custom_codebuild_policy_document" {
 #-----
 
 variable "custom_codepipeline_policy_document" {
-  description = "Custom policy document for CodePipeline. Use `aws_iam_policy_document` data block to generate json"
+  description = <<-EOT
+    Custom policy document for CodePipeline to attach instead of policy defined in this module.
+    Use `aws_iam_policy_document` data block to generate JSON
+  EOT
   type        = string
   default     = null
 }
+
 variable "additional_codepipeline_iam_permisssions" {
   description = "List of additional permissions to attach to default CodePipeline IAM policy. example: [\"ecs:*\", \"cloudwatch:*\"]"
   type        = list(any)
