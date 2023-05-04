@@ -59,7 +59,7 @@ variable "codebuild_s3_logs" {
 }
 
 variable "additional_codebuild_iam_permisssions" {
-  description = "List of additional permissions to attach to default CodeBuild IAM policy. example: [\"ecs:*\", \"cloudwatch:*\"]"
+  description = "List of additional permissions to attach to CodeBuild IAM policy defined in this module. example: [\"ecs:*\", \"cloudwatch:*\"]"
   type        = list(any)
   default     = []
 }
@@ -87,7 +87,7 @@ variable "custom_codepipeline_policy_document" {
 }
 
 variable "additional_codepipeline_iam_permisssions" {
-  description = "List of additional permissions to attach to default CodePipeline IAM policy. example: [\"ecs:*\", \"cloudwatch:*\"]"
+  description = "List of additional permissions to attach to CodePipeline IAM policy defined in this module. example: [\"ecs:*\", \"cloudwatch:*\"]"
   type        = list(any)
   default     = []
 }
