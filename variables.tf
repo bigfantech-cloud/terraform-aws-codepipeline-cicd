@@ -70,19 +70,19 @@ variable "buildspec" {
 }
 
 variable "enable_codebuild_cloudwatch_logs" {
-  description = "Enable CloudWathach log for CodeBuild. Defaul = true"
+  description = "Enable CloudWathach log for CodeBuild. Default = true"
   type        = bool
   default     = true
 }
 
 variable "codebuild_cloudwatch_logs_retention_in_days" {
-  description = "Number in days to retain CodeBuild logs in CloudWatch. Defaul = 90"
+  description = "Number in days to retain CodeBuild logs in CloudWatch. Default = 90"
   type        = number
   default     = 90
 }
 
 variable "enable_codebuild_s3_logs" {
-  description = "Save CodeBuild logs in S3 bucket. Defaul = false"
+  description = "Save CodeBuild logs in S3 bucket. Default = false"
   type        = bool
   default     = false
 }
