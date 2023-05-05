@@ -56,8 +56,7 @@ To setup CodeBuild, CodePipeline CICD.
 | `additional_codepipeline_iam_permisssions` | List of additional permissions to attach to CodePipeline IAM policy defined in this module<br>`example:` ["ecs:*", "cloudwatch:*"]                                                                                                                          | []      |
 | `custom_codepipeline_policy_document`      | Custom policy document for CodeBuild to attach instead of policy defined in this module.<br>Use `aws_iam_policy_document` data block to generate JSON                                                                                                                                         | null    |
 | `custom_codebuild_policy_document`         | Custom policy document for CodePipeline to attach instead of policy defined in this module.<br>Use `aws_iam_policy_document` data block to generate JSON                                                                                                                                              | null    |
-| `codebuild_environment_config`  | Map of CodeBuild runner environment config containing `compute_type`, `image`, `type`, `image_pull_credentials_type`, `privileged_mode` | {<br>compute_type                = "BUILD_GENERAL1_SMALL"<br>image                       = "aws/codebuild/standard:6.0"<br>type                        = "LINUX_CONTAINER"<br>image_pull_credentials_type = "CODEBUILD"<br>privileged_mode             = true<br>
-    } |
+| `codebuild_environment_config`  | Map of CodeBuild runner environment config containing `compute_type`, `image`, `type`, `image_pull_credentials_type`, `privileged_mode` | {<br>compute_type                = "BUILD_GENERAL1_SMALL"<br>image                       = "aws/codebuild/standard:6.0"<br>type                        = "LINUX_CONTAINER"<br>image_pull_credentials_type = "CODEBUILD"<br>privileged_mode             = true<br>} |
 
 ### Example config
 
