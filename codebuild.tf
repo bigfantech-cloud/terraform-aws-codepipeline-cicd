@@ -9,22 +9,21 @@ resource "aws_codebuild_project" "default" {
   }
 
   environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/standard:6.0"
-    type                        = "LINUX_CONTAINER"
-    image_pull_credentials_type = "CODEBUILD"
-    privileged_mode             = true
-
-    environment_variable {
-      name  = "environment"
-      value = module.this.environment
-    }
+    compute_type                = var.codebuild_environment_config["compute_type"]
+    image                       = var.codebuild_environment_config["image"]
+    type                        = var.codebuild_environment_config["type"]
+    image_pull_credentials_type = var.codebuild_environment_config["image_pull_credentials_type"]
+    privileged_mode             = var.codebuild_environment_config["privileged_mode"]
 
     environment_variable {
       name  = "project_name"
       value = module.this.project_name
     }
-
+      
+    environment_variable {
+      name  = "environment"
+      value = module.this.environment
+    }
   }
 
   artifacts {
@@ -32,15 +31,14 @@ resource "aws_codebuild_project" "default" {
   }
 
   logs_config {
-
     cloudwatch_logs {
-      status      = var.codebuild_cloudwatch_logs ? "ENABLED" : "DISABLED"
-      group_name  = aws_cloudwatch_log_group.codebuild.name
+      status      = var.enable_codebuild_cloudwatch_logs ? "ENABLED" : "DISABLED"
+      group_name  = aws_cloudwatch_log_group.codebuild[0].name
       stream_name = "build"
     }
 
     dynamic "s3_logs" {
-      for_each = var.codebuild_s3_logs ? ["true"] : []
+      for_each = var.enable_codebuild_s3_logs ? ["true"] : []
 
       content {
         status   = "ENABLED"
@@ -67,8 +65,10 @@ resource "aws_codebuild_project" "default" {
 }
 
 resource "aws_cloudwatch_log_group" "codebuild" {
+  count = var.enable_codebuild_cloudwatch_logs ? 1 : 0
+  
   name              = "/codebuild/${module.this.id}"
-  retention_in_days = 90
+  retention_in_days = var.codebuild_cloudwatch_logs_retention_in_days
 
   tags = module.this.tags
 }
@@ -76,8 +76,9 @@ resource "aws_cloudwatch_log_group" "codebuild" {
 #---
 # CLOUDFRONT INVALIDATION
 #---
+  
 resource "aws_codebuild_project" "cloudfront_invalidation" {
-  count = var.create_cloudfront_invalidation ? 1 : 0
+  count = var.create_cloudfront_invalidation && var.cloudfront_id_for_invalidation != null ? 1 : 0
 
   name         = "${module.this.id}-cf-invalidation-project"
   description  = "${module.this.id} CloudFront invalidation project"
@@ -94,23 +95,22 @@ resource "aws_codebuild_project" "cloudfront_invalidation" {
           - echo Creating CloudFront Invalidation...
           - AWS_PAGER=""
           - aws cloudfront create-invalidation --distribution-id ${var.cloudfront_id_for_invalidation} --paths "/*"
-EOT
+    EOT
   }
 
   environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/standard:6.0"
-    type                        = "LINUX_CONTAINER"
-    image_pull_credentials_type = "CODEBUILD"
-    privileged_mode             = true
+    compute_type                = var.codebuild_environment_config["compute_type"]
+    image                       = var.codebuild_environment_config["image"]
+    type                        = var.codebuild_environment_config["type"]
+    image_pull_credentials_type = var.codebuild_environment_config["image_pull_credentials_type"]
+    privileged_mode             = var.codebuild_environment_config["privileged_mode"]
   }
 
   logs_config {
-
     cloudwatch_logs {
       status      = var.codebuild_cloudwatch_logs ? "ENABLED" : "DISABLED"
-      group_name  = aws_cloudwatch_log_group.codebuild.name
-      stream_name = "cf-invalidation"
+      group_name  = aws_cloudwatch_log_group.codebuild[0].name
+      stream_name = "cloudfront-invalidation"
     }
   }
 
@@ -131,7 +131,7 @@ EOT
   tags = merge(
     module.this.tags,
     {
-      Name = "${module.this.id}-cf-invalidation-project"
+      Name = "${module.this.id}-cloudfront-invalidation"
     }
   )
 }
