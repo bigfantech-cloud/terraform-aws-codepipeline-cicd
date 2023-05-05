@@ -1,33 +1,26 @@
 variable "vpc_id" {
-  description = "VPC ID"
+  description = "VPC ID to run CodeBuild in"
   type        = string
   default     = null
 }
 
 variable "subnet_id" {
-  description = "Subnet ID"
+  description = "List of subnet IDs to run CodeBuild in"
   type        = list(string)
-  default     = []
-}
-
-variable "cb_log_bucket_force_destroy" {
-  description = "Delete all objects from the bucket so that the bucket can be destroyed without error. Default = false"
-  type        = bool
-  default     = false
-}
-
-
-variable "cp_artifact_bucket_force_destroy" {
-  description = "Delete all objects from CodePipeline Artifact bucket so that the bucket can be destroyed without error. Default = false"
-  type        = bool
-  default     = false
+  default     = null
 }
 
 variable "aws_chatbot_slack_arn" {
-  description = <<EOF
-  AWS ChatBot Slack client configuration ARN.
-  AWS ChatBot Slack Client Configuration need to be done from console.
-  EOF
+  description = <<-EOT
+    AWS ChatBot Slack client configuration ARN
+    AWS ChatBot Slack Client Configuration must be done from console
+  EOT
+  type        = string
+  default     = null
+}
+
+variable "codestar_connection_arn" {
+  description = "CodeStar connection ARN for CodePipeline"
   type        = string
   default     = null
 }
@@ -36,8 +29,36 @@ variable "aws_chatbot_slack_arn" {
 #CODEBUILD
 #-----
 
+variable "codebuild_environment_config" {
+  description = <<-EOT
+    Map of CodeBuild runner environment config containing `compute_type`, `image`, `type`, `image_pull_credentials_type`, `privileged_mode`
+    Default = {
+      compute_type                = "BUILD_GENERAL1_SMALL"
+      image                       = "aws/codebuild/standard:6.0"
+      type                        = "LINUX_CONTAINER"
+      image_pull_credentials_type = "CODEBUILD"
+      privileged_mode             = true
+    }
+  EOT
+  type = object({
+    compute_type                = string
+    image                       = string
+    type                        = string
+    image_pull_credentials_type = string
+    privileged_mode             = bool
+  })
+  
+  default = {
+      compute_type                = "BUILD_GENERAL1_SMALL"
+      image                       = "aws/codebuild/standard:6.0"
+      type                        = "LINUX_CONTAINER"
+      image_pull_credentials_type = "CODEBUILD"
+      privileged_mode             = true
+ }
+}
+
 variable "codebuild_inside_vpc" {
-  description = "Enable CodeBuild inside VPC, true or false. Default = false"
+  description = "Enable CodeBuild inside VPC. Default = false"
   type        = bool
   default     = false
 }
@@ -48,14 +69,46 @@ variable "buildspec" {
   default     = null
 }
 
-variable "codebuild_cloudwatch_logs" {
+variable "enable_codebuild_cloudwatch_logs" {
   description = "Enable CloudWathach log for CodeBuild. Defaul = true"
+  type        = bool
   default     = true
 }
 
-variable "codebuild_s3_logs" {
+variable "codebuild_cloudwatch_logs_retention_in_days" {
+  description = "Number in days to retain CodeBuild logs in CloudWatch. Defaul = 90"
+  type        = number
+  default     = 90
+}
+
+variable "enable_codebuild_s3_logs" {
   description = "Save CodeBuild logs in S3 bucket. Defaul = false"
+  type        = bool
   default     = false
+}
+
+variable "codebuild_log_bucket_force_destroy" {
+  description = "Delete all objects from the CodeBuild log bucket, so that the bucket can be destroyed without error. Default = false"
+  type        = bool
+  default     = false
+}
+
+variable "create_codebuild_log_bucket_lifecycle" {
+  description = "Whether to create CodeBuild log bucket object lifecycle. Default = true"
+  type        = bool
+  default     = true
+}
+
+variable "codebuild_log_bucket_lifecycle_transition_days" {
+  description = "Number in days after which objects are transistioned to Glacier. Default = 90"
+  type        = number
+  default     = 90
+}
+
+variable "codebuild_log_bucket_lifecycle_expiration_days" {
+  description = "Number in days after which objects are deleted. Default = 180"
+  type        = number
+  default     = 180
 }
 
 variable "additional_codebuild_iam_permisssions" {
@@ -77,6 +130,12 @@ variable "custom_codebuild_policy_document" {
 #CODEPIPELINE
 #-----
 
+variable "codepipeline_artifact_bucket_force_destroy" {
+  description = "Delete all objects from CodePipeline Artifact bucket, so that the bucket can be destroyed without error. Default = false"
+  type        = bool
+  default     = false
+}
+
 variable "custom_codepipeline_policy_document" {
   description = <<-EOT
     Custom policy document for CodePipeline to attach instead of policy defined in this module.
@@ -90,12 +149,6 @@ variable "additional_codepipeline_iam_permisssions" {
   description = "List of additional permissions to attach to CodePipeline IAM policy defined in this module. example: [\"ecs:*\", \"cloudwatch:*\"]"
   type        = list(any)
   default     = []
-}
-
-variable "codestar_connection_arn" {
-  description = "CodeStar connection ARN for CodePipeline."
-  type        = string
-  default     = null
 }
 
 variable "deploy_provider" {
@@ -136,13 +189,17 @@ variable "vcs_branch" {
 }
 
 variable "create_cloudfront_invalidation" {
-  description = "Whether to create invalidation. Default = false"
+  description = "Whether to create invalidation. A post deployment action will be added to CodePipeline. Default = false"
   type        = bool
   default     = false
 }
 
 variable "cloudfront_id_for_invalidation" {
-  description = "Provide CloudFront distribution ID to create invalidation. A post deployment action will be added to CodePipeline. Default = null"
+  description = <<-EOT
+    CloudFront distribution ID to create invalidation for
+    This is used when CloudFront + S3 deployment is done, to clear cache in edge locations
+    Default = null
+  EOT
   type        = string
   default     = null
 }
