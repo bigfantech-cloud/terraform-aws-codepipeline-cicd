@@ -30,9 +30,9 @@ resource "aws_s3_bucket_public_access_block" "codebuild" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
-  
+
 resource "aws_s3_bucket_lifecycle_configuration" "codebuild_log" {
-  count      = var.create_codebuild_log_bucket_lifecycle ? 1 : 0
+  count = var.create_codebuild_log_bucket_lifecycle ? 1 : 0
 
   bucket = aws_s3_bucket.codebuild[0].id
 
@@ -48,8 +48,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "codebuild_log" {
     expiration {
       days = var.codebuild_log_bucket_lifecycle_expiration_days
     }
+  }
 }
-
 #----
 #CODEPIPELINE
 #----
